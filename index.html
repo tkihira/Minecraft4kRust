@@ -18,5 +18,18 @@ body { background-color: #DDDDDD; font: 30px sans-serif; }
 <canvas id="game" width="200" height="200"></canvas>
 </body>
 <script>
+const imports = {
+    env: {
+        random: Math.random,
+        sqrt: Math.sqrt
+    }
+};
+let exports;
+fetch('mine.wasm').then(response => response.arrayBuffer())
+    .then(bytes => WebAssembly.instantiate(bytes, imports))
+    .then(results => {
+        exports = results.instance.exports;
+        console.log(results);
+    });
 </script>
 </html>

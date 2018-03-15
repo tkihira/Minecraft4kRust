@@ -1,5 +1,8 @@
+// rustc mine.rs --crate-type=cdylib -O --target=wasm32-unknown-unknown -o mine.wasm
 const W:i32 = 200;
 const H:i32 = 200;
+
+static mut PIXELS: & mut [u8] = &mut [0; (W * H * 4) as usize];
 
 static mut MAP: &'static mut[i32] = &mut[0; 64 * 64 * 64];
 static mut TEXMAP: & mut [i32] = &mut [0; 16 * 16 * 3 * 16];
@@ -9,6 +12,7 @@ extern {
     fn sqrt(_: f64) -> f64;
 }
 
+#[no_mangle]
 pub unsafe extern "C" fn init() {
     for i in 1..16 {
         let mut br = 255 - (random() * 96.) as i32;
@@ -75,8 +79,6 @@ pub unsafe extern "C" fn init() {
         }
     }
 
-    // setting up ctx here
-    
     for x in 0..64 {
         for y in 0..64 {
             for z in 0..64 {
@@ -90,4 +92,10 @@ pub unsafe extern "C" fn init() {
             }
         }
     }
+
+    for i in 0..W * H {
+        PIXELS[(i * 4 + 3) as usize] = 255;
+    }
 }
+
+
