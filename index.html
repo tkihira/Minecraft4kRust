@@ -21,15 +21,33 @@ body { background-color: #DDDDDD; font: 30px sans-serif; }
 const imports = {
     env: {
         random: Math.random,
-        sqrt: Math.sqrt
+        sqrt: Math.sqrt,
+        sin: Math.sin,
+        cos: Math.cos,
+        now: Date.now,
     }
 };
-let exports;
 fetch('mine.wasm').then(response => response.arrayBuffer())
     .then(bytes => WebAssembly.instantiate(bytes, imports))
-    .then(results => {
-        exports = results.instance.exports;
-        console.log(results);
-    });
+    .then(results => start(results.instance.exports));
+
+function start(exports) {
+    console.log("initializing");
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const pixels = ctx.createImageData(200, 200);
+
+    const memory = exports.memory;
+    const address = exports.getPixelAddress();
+
+    exports.init();
+    (function clock() {
+        setTimeout(clock, 1000 / 100);
+        exports.renderMinecraft();
+        const buf = new Uint8Array(memory.buffer, address, 200 * 200 * 4);
+        pixels.data.set(buf);
+        ctx.putImageData(pixels, 0, 0);
+    })();
+}
 </script>
 </html>

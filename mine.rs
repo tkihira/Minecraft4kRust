@@ -17,6 +17,11 @@ extern {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn getPixelAddress() -> *const u8 {
+    &PIXELS[0]
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn init() {
     for i in 1..16 {
         let mut br = 255 - (random() * 96.) as i32;
@@ -104,15 +109,15 @@ pub unsafe extern "C" fn init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn renderMinecraft() {
-    let x_rot = sin((now() as i32 % 10000) as f64 / 10000. * PI * 2.) * 0.4
+    let x_rot = sin((now() as i64 % 10000) as f64 / 10000. * PI * 2.) * 0.4
             + PI / 2.;
-    let y_rot = cos((now() as i32 % 10000) as f64 / 10000. * PI * 2.) * 0.4;
+    let y_rot = cos((now() as i64 % 10000) as f64 / 10000. * PI * 2.) * 0.4;
     let y_cos = cos(y_rot);
     let y_sin = sin(y_rot);
     let x_cos = cos(x_rot);
     let x_sin = sin(x_rot);
 
-    let ox = 32.5 + (now() as i32 % 10000) as f64 / 10000. * 64.;
+    let ox = 32.5 + (now() as i64 % 10000) as f64 / 10000. * 64.;
     let oy = 32.5;
     let oz = 32.5;
 
