@@ -1,14 +1,14 @@
 // rustc mine.rs --crate-type=cdylib -O --target=wasm32-unknown-unknown -o mine.wasm
 use std::f64::consts::PI;
-const W:i32 = 200;
-const H:i32 = 200;
+const W: i32 = 200;
+const H: i32 = 200;
 
-static mut PIXELS: & mut [u8] = &mut [0; (W * H * 4) as usize];
+static mut PIXELS: &mut [u8] = &mut [0; (W * H * 4) as usize];
 
-static mut MAP: &'static mut[i32] = &mut[0; 64 * 64 * 64];
-static mut TEXMAP: & mut [i32] = &mut [0; 16 * 16 * 3 * 16];
+static mut MAP: &'static mut [i32] = &mut [0; 64 * 64 * 64];
+static mut TEXMAP: &mut [i32] = &mut [0; 16 * 16 * 3 * 16];
 
-extern {
+extern "C" {
     fn random() -> f64;
     fn sqrt(_: f64) -> f64;
     fn sin(_: f64) -> f64;
@@ -25,7 +25,7 @@ pub unsafe extern "C" fn getPixelAddress() -> *const u8 {
 pub unsafe extern "C" fn init() {
     for i in 1..16 {
         let mut br = 255 - (random() * 96.) as i32;
-        for y in 0..16*3 {
+        for y in 0..16 * 3 {
             for x in 0..16 {
                 let mut color = 0x966C4A;
                 if i == 4 {
@@ -41,8 +41,7 @@ pub unsafe extern "C" fn init() {
                 }
                 if i == 7 {
                     color = 0x675231;
-                    if x > 0 && x < 15
-                        && ((y > 0 && y < 15) || (y > 32 && y < 47)) {
+                    if x > 0 && x < 15 && ((y > 0 && y < 15) || (y > 32 && y < 47)) {
                         color = 0xBC9862;
                         let mut xd = x - 7;
                         let mut yd = (y & 15) - 7;
@@ -81,8 +80,8 @@ pub unsafe extern "C" fn init() {
                     }
                 }
                 let col = (((color >> 16) & 0xFF) * brr / 255) << 16
-                        | (((color >> 8) & 0xFF) * brr / 255) << 8
-                        | (((color) & 0xFF) * brr / 255);
+                    | (((color >> 8) & 0xFF) * brr / 255) << 8
+                    | (((color) & 0xFF) * brr / 255);
                 TEXMAP[(x + y * 16 + i * 256 * 3) as usize] = col;
             }
         }
@@ -109,8 +108,7 @@ pub unsafe extern "C" fn init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn renderMinecraft() {
-    let x_rot = sin((now() as i64 % 10000) as f64 / 10000. * PI * 2.) * 0.4
-            + PI / 2.;
+    let x_rot = sin((now() as i64 % 10000) as f64 / 10000. * PI * 2.) * 0.4 + PI / 2.;
     let y_rot = cos((now() as i64 % 10000) as f64 / 10000. * PI * 2.) * 0.4;
     let y_cos = cos(y_rot);
     let y_sin = sin(y_rot);
@@ -151,7 +149,11 @@ pub unsafe extern "C" fn renderMinecraft() {
                     dim_length = _zd;
                 }
 
-                let ll = 1. / if dim_length < 0. {-dim_length} else {dim_length};
+                let ll = 1. / if dim_length < 0. {
+                    -dim_length
+                } else {
+                    dim_length
+                };
                 let xd = _xd * ll;
                 let yd = _yd * ll;
                 let zd = _zd * ll;
@@ -185,7 +187,9 @@ pub unsafe extern "C" fn renderMinecraft() {
                 }
 
                 while dist < closest {
-                    let tex = MAP[((zp as i32 & 63) << 12 | (yp as i32 & 63) << 6 | (xp as i32 & 63)) as usize];
+                    let tex = MAP[((zp as i32 & 63) << 12 | (yp as i32 & 63) << 6
+                                      | (xp as i32 & 63))
+                                      as usize];
 
                     if tex > 0 {
                         let mut u = ((xp + zp) * 16.) as i32 & 15;
