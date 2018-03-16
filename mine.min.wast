@@ -1,27 +1,16 @@
 (module
-  (type (;0;) (func (param i32 i32) (result i32)))
-  (type (;1;) (func (param i32 i32 i32) (result i32)))
-  (type (;2;) (func (param i32)))
-  (type (;3;) (func (param i32) (result i64)))
-  (type (;4;) (func (param i32 i32 i32)))
-  (type (;5;) (func (param f64) (result f64)))
-  (type (;6;) (func (result f64)))
-  (type (;7;) (func))
-  (type (;8;) (func (param i32 i32)))
-  (type (;9;) (func (param i32 i32 i32 i32)))
-  (type (;10;) (func (result i32)))
-  (type (;11;) (func (param i32) (result i32)))
-  (type (;12;) (func (param i32 i32 i32 i32 i32 i32) (result i32)))
-  (type (;13;) (func (param i32 i32 i32 i32 i32 i32 i32) (result i32)))
-  (type (;14;) (func (param i32 i32 i32 i32) (result i32)))
-  (import "env" "cos" (func (;0;) (type 5)))
-  (import "env" "now" (func (;1;) (type 6)))
-  (import "env" "random" (func (;2;) (type 6)))
-  (import "env" "sin" (func (;3;) (type 5)))
-  (import "env" "sqrt" (func (;4;) (type 5)))
-  (func (;5;) (type 10) (result i32)
+  (type (;0;) (func (param f64) (result f64)))
+  (type (;1;) (func (result f64)))
+  (type (;2;) (func))
+  (type (;3;) (func (result i32)))
+  (import "env" "cos" (func (;0;) (type 0)))
+  (import "env" "now" (func (;1;) (type 1)))
+  (import "env" "random" (func (;2;) (type 1)))
+  (import "env" "sin" (func (;3;) (type 0)))
+  (import "env" "sqrt" (func (;4;) (type 0)))
+  (func (;5;) (type 3) (result i32)
     i32.const 16)
-  (func (;6;) (type 7)
+  (func (;6;) (type 2)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 f64 f64 f64 f64)
     i32.const 1211664
     set_local 8
@@ -648,7 +637,7 @@
       return
     end
     )
-  (func (;7;) (type 7)
+  (func (;7;) (type 2)
     (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i32 i64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64 f64)
     block  ;; label = @1
       block  ;; label = @2
@@ -1383,8 +1372,7 @@
         end
       end
     end
-    )
-  (table (;0;) 52 52 anyfunc)
+  )
   (memory (;0;) 36)
   (export "memory" (memory 0))
   (export "getPixelAddress" (func 5))
