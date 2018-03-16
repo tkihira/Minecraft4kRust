@@ -1,0 +1,9 @@
+[package]
+name = "mine"
+version = "0.1.0"
+authors = ["Takuo KIHIRA <tkihira@tombo.io>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
