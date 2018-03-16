@@ -39,12 +39,12 @@ function start(exports) {
 
     const memory = exports.memory;
     const address = exports.getPixelAddress();
+    const buf = new Uint8Array(memory.buffer, address, 200 * 200 * 4);
 
     exports.init();
     (function clock() {
         setTimeout(clock, 1000 / 100);
         exports.renderMinecraft();
-        const buf = new Uint8Array(memory.buffer, address, 200 * 200 * 4);
         pixels.data.set(buf);
         ctx.putImageData(pixels, 0, 0);
     })();
